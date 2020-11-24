@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Geo lookup provided courtesy of freegeoip.net"""
 
 import argparse
@@ -88,7 +89,8 @@ class Torrent(object):
         self.reactor = reactor.Reactor()
         self.reactor.add_listeners([PeerListener(torrent=self, port=7000),
                                     VisListener(torrent=self, port=8035)])
-
+       
+    
         # Try to connect to visualization server
         vis_socket = connect_vis(visualizer) if visualizer else None
         if directory:
@@ -170,12 +172,13 @@ class Torrent(object):
         payload['supportcrypto'] = 1
         payload['event'] = 'started'
         return payload
-
+#ペイロードとは、IT用語としては、パケット通信においてパケットに含まれるヘッダやトレーラなどの付加的情報を除いた、データ本体のことである。
     # TODO -- refactor?
     def tracker_request(self):
         '''
         Sends the initial request to the tracker, compiling list of all peers
         announcing to the tracker
+        最初のリクエストをトラッカーに送信し、トラッカーにアナウンスするすべてのピアのリストをコンパイルします
         '''
 
         assert self.torrent_dict['info']
@@ -197,6 +200,9 @@ class Torrent(object):
         Generates list of peer IPs from tracker response. Note: not all of
         these IPs might be good, which is why we only init peer objects for
         the subset that respond to handshake
+        トラッカー応答からピアIPのリストを生成します。注：すべてではありません
+        これらのIPは良いかもしれません。そのため、ピアオブジェクトを初期化するのは
+        ハンドシェイクに応答するサブセット
         '''
         presponse = [ord(i) for i in self.tracker_response['peers']]
         while presponse:
@@ -215,6 +221,12 @@ class Torrent(object):
         reserved = chr(0)*8
         info_hash = 20-byte hash above (aka self.hash_string)
         peer_id = 20-byte string
+        -------------------------
+        pstrlen = 1バイトとしてのpstrの長さ
+        pstr = BitTorrentプロトコル
+        予約済み= chr（0）* 8
+        info_hash =上記の20バイトのハッシュ（別名self.hash_string）
+        peer_id = 20バイトの文字列
         '''
 
         pstr = 'BitTorrent protocol'
@@ -265,6 +277,7 @@ class Torrent(object):
         '''
         Creates a new peer object for a nvalid socket and adds it to reactor's
         listen list
+        nvalidソケットの新しいピアオブジェクトを作成し、reactorのに追加します
         '''
         location_json = requests.request("GET", "http://freegeoip.net/json/"
                                          + sock.getpeername()[0]).content
@@ -323,7 +336,7 @@ def main():
         mytorrent.handshake_peers()
         mytorrent.reactor.event_loop()
 
-
+    
 def open_socket(url):
     split_url = url.split(':')
     split_url[1] = int(split_url[1])

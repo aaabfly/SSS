@@ -119,10 +119,14 @@ def bdecode(bstring):
     dict_repr = get_val()
     return dict_repr
 
-
+    
+    
 def bdecode_file(filename):
     '''
         Bdecodes a .torrent or other bencoded file
     '''
     with open(filename) as f:
         return bdecode(f.read())
+    
+    
+
