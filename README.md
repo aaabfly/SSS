@@ -7,6 +7,5 @@ python2 と python3どちらも動作するようにしてください
 `python setup.py install`
 
 
-##実行方法
-#SSSフォルダにあるSSS_GUI.pyをPython3で実行してください
+##実行方法はSSSフォルダにあるSSS_GUI.pyをPython3で実行してください
 
